@@ -1,22 +1,38 @@
-import React from 'react';
-import Card from './components/card.jsx';
-import './App.css';
-import Navbar from './components/navbar.jsx'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { CatalogProvider } from "./context/CatalogContext.jsx";
+import { CartProvider } from "./context/CartContext.jsx";
+import MainLayout from "./components/layout/MainLayout.jsx";
+import AdminLayout from "./pages/admin/AdminLayout.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import Home from "./pages/Home.jsx";
+import SegmentHub from "./pages/SegmentHub.jsx";
+import ShopCategory from "./pages/ShopCategory.jsx";
+import ProductDetail from "./pages/ProductDetail.jsx";
+import Cart from "./pages/Cart.jsx";
+import NotFound from "./pages/NotFound.jsx";
+import "./App.css";
 
-
-const App = () => {
+export default function App() {
   return (
-    <>
-    <div className="navigation">
-      <Navbar />
-    </div>
-    <div className='parent'>
-      <Card name = "Taimoor" age = {22} img="https://images.unsplash.com/photo-1774327988852-531c6eba5397?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"/>
-      <Card name = "Arshad" age = {70} img="https://images.unsplash.com/photo-1777221490079-b949ecac1a9e?q=80&w=765&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"/>
-      <Card name = "Mughal" age = {23} img="https://images.unsplash.com/photo-1770041797744-59e295885e8b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2M3x8fGVufDB8fHx8fA%3D%3D"/>
-    </div>
-    </>
-  )
+    <CatalogProvider>
+      <BrowserRouter>
+        <CartProvider>
+          <Routes>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+            </Route>
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/men" element={<SegmentHub segment="men" />} />
+              <Route path="/women" element={<SegmentHub segment="women" />} />
+              <Route path="/shop/:segment/:category" element={<ShopCategory />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </CartProvider>
+      </BrowserRouter>
+    </CatalogProvider>
+  );
 }
-
-export default App
